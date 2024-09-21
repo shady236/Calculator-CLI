@@ -6,14 +6,13 @@ const Operator_t SUB = '-';
 const Operator_t MUL = '*';
 const Operator_t DIV = '/';
 const Operator_t POW = '^';
-// const Operator_t* operators[] = {SUM, SUB, MUL, DIV, POW};
 
 
-bool isValidOperator(Operator_t ch) {
+bool isValidOperator(const Operator_t ch) {
     return ch == SUM || ch == SUB || ch == MUL || ch == DIV || ch == POW;
 }
 
-int operatorPriority(Operator_t op) {
+int operatorPriority(const Operator_t op) {
     if (op == SUM || op == SUB) {
         return 1;
     }
@@ -26,21 +25,27 @@ int operatorPriority(Operator_t op) {
     return -1;
 }
 
-double opCalc(Operator_t op, double operand1, double operand2) {
+bool opCalc(const Operator_t op, const double operand1, const double operand2, double* const res) {
     if (op == SUM) {
-        return operand1 + operand2;
+        *res = operand1 + operand2;
     }
     else if (op == SUB) {
-        return operand1 - operand2;
+        *res = operand1 - operand2;
     }
     else if (op == MUL) {
-        return operand1 * operand2;
+        *res = operand1 * operand2;
     }
     else if (op == DIV) {
-        return operand1 / operand2;
+        if (operand2 == 0) {
+            return false;
+        }
+
+        *res = operand1 / operand2;
     }
     else if (op == POW) {
-        return pow(operand1, operand2);
+        *res = pow(operand1, operand2);
     }
+
+    return true;
 }
 

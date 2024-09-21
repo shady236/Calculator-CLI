@@ -15,9 +15,9 @@ extern const Operator_t DIV;
 extern const Operator_t POW;
 
 
-bool isValidOperator(Operator_t ch);
-int operatorPriority(Operator_t op);
-double opCalc(Operator_t op, double operand1, double operand2);
+bool isValidOperator(const Operator_t ch);
+int operatorPriority(const Operator_t op);
+bool opCalc(const Operator_t op, const double operand1, const double operand2, double* const res);
 
 
 

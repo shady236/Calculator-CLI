@@ -29,26 +29,40 @@ char* getFunc(const char* const expression) {
     return NULL;
 }
 
-double funcCalc(const char* const func, const double operand) {
+bool funcCalc(const char* const func, const double operand, double* const res) {
     if (func == LOG) {
-        return log(operand);
+        if (operand == 0) {
+            return false;
+        }
+
+        *res = log(operand);
     }
     else if (func == ABS) {
-        return abs(operand);
+        *res = abs(operand);
     }
     else if (func == FACT) {
-        return fact(operand);
+        if (operand < 0 || ((double) ((int) operand)) != operand) {
+            return false;
+        }
+        
+        *res = fact(operand);
     }
     else if (func == SQRT) {
-        return sqrt(operand);
+        if (operand < 0) {
+            return false;
+        }
+
+        *res = sqrt(operand);
     }
     else if (func == SIN) {
-        return sin(operand * M_PI / 180);
+        *res = sin(operand * M_PI / 180);
     }
     else if (func == COS) {
-        return cos(operand * M_PI / 180);
+        *res = cos(operand * M_PI / 180);
     }
     else if (func == TAN) {
-        return tan(operand * M_PI / 180);
+        *res = tan(operand * M_PI / 180);
     }
+
+    return true;
 }

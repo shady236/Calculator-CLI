@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <stdbool.h>
 
 
 extern const char* LOG;
@@ -17,7 +18,7 @@ extern const char* TAN;
 
 
 char* getFunc(const char* const expression);
-double funcCalc(const char* const func, const double operand);
+bool funcCalc(const char* const func, const double operand, double* const res);
 
 
 #endif   // _FUNCTION_H_

@@ -21,7 +21,7 @@ bool calc(const char* const expression, double* const res) {
     strcat(enclosedExpression, ")");
     removeSpaces(enclosedExpression);
     
-    int endIdx = -1;
+    int endIdx = 0;
     *res = enclosedCalc(enclosedExpression, &endIdx);
 
     return (endIdx == strlen(enclosedExpression) - 1);
@@ -31,6 +31,7 @@ bool calc(const char* const expression, double* const res) {
 static double enclosedCalc(const char* const expression, int* const endIdx) {
     Stack_t vals;
     Stack_t ops;
+    *endIdx = 0;
     
     if (Stack_Init(&vals, 10, sizeof(double), printDouble) == false) {
         *endIdx = -1;
@@ -104,8 +105,16 @@ static double enclosedCalc(const char* const expression, int* const endIdx) {
                 double val1, val2;
                 Stack_Pop(&vals, &val2);
                 Stack_Pop(&vals, &val1);
-                double opRes = opCalc(op, val1, val2);
+                double opRes;
+                if (opCalc(op, val1, val2, &opRes) == false) {
+                    *endIdx = -1;
+                    break;
+                }
                 Stack_Push(&vals, &opRes);
+            }
+
+            if (*endIdx == -1) {
+                break;
             }
 
             if (numNotClosedBrackets == 0) {
@@ -126,7 +135,7 @@ static double enclosedCalc(const char* const expression, int* const endIdx) {
 
                 Stack_Push(&vals, &val);
                 isPrevTokenNum = true;
-                i += j;
+                i += j + 1;
                 continue;
             }
             isPrevTokenNum = false;
@@ -142,8 +151,17 @@ static double enclosedCalc(const char* const expression, int* const endIdx) {
                 double val1, val2;
                 Stack_Pop(&vals, &val2);
                 Stack_Pop(&vals, &val1);
-                double opRes = opCalc(op, val1, val2);
+                double opRes;
+                if (opCalc(op, val1, val2, &opRes) == false) {
+                    *endIdx = -1;
+                    break;
+                }
+                
                 Stack_Push(&vals, &opRes);
+            }
+
+            if (*endIdx == -1) {
+                break;
             }
 
             Stack_Push(&ops, &expression[i]);
@@ -174,7 +192,12 @@ static double enclosedCalc(const char* const expression, int* const endIdx) {
                 break;
             }
 
-            double funcRes = funcCalc(func, param);
+            double funcRes;
+            if (funcCalc(func, param, &funcRes) == false) {
+                *endIdx = -1;
+                break;
+            }
+            
             Stack_Push(&vals, &funcRes);
             i += funcLen + j + 1;
         }
