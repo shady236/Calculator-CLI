@@ -31,7 +31,7 @@ char* getFunc(const char* const expression) {
 
 bool funcCalc(const char* const func, const double operand, double* const res) {
     if (func == LOG) {
-        if (operand == 0) {
+        if (operand <= 0) {
             return false;
         }
 
@@ -41,7 +41,7 @@ bool funcCalc(const char* const func, const double operand, double* const res) {
         *res = abs(operand);
     }
     else if (func == FACT) {
-        if (operand < 0 || ((double) ((int) operand)) != operand) {
+        if (operand < 0 || ((double) ((long long) operand)) != operand) {
             return false;
         }
         
@@ -61,6 +61,10 @@ bool funcCalc(const char* const func, const double operand, double* const res) {
         *res = cos(operand * M_PI / 180);
     }
     else if (func == TAN) {
+        if ((long long) operand == operand && ((long long) operand) % 180 == 90) {
+            return false;
+        }
+
         *res = tan(operand * M_PI / 180);
     }
 
