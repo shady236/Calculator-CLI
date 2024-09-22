@@ -48,7 +48,7 @@ double parse(const char* const str, int* const endIdx) {
     return val * sign;
 }
 
-void removeSpaces(char* const str) {
+void normalize(char* const str) {
     int moveSteps = 0;
     int i = 0;
     
@@ -57,7 +57,7 @@ void removeSpaces(char* const str) {
             moveSteps++;
         }
         else {
-            str[i - moveSteps] = str[i];
+            str[i - moveSteps] = tolower(str[i]);
         }
 
         i++;

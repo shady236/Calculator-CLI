@@ -4,9 +4,11 @@
 
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
+
 
 double parse(const char* const str, int* const endIdx);
-void removeSpaces(char* const str);
+void normalize(char* const str);
 
 
 
