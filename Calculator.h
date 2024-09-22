@@ -11,6 +11,7 @@
 #include "str.h"
 #include "Operator.h"
 #include "Function.h"
+#include "Constant.h"
 
 
 

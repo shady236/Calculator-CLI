@@ -19,7 +19,7 @@ bool calc(const char* const expression, double* const res) {
     strcpy(enclosedExpression, "(");
     strcat(enclosedExpression, expression);
     strcat(enclosedExpression, ")");
-    removeSpaces(enclosedExpression);
+    normalize(enclosedExpression);
     
     int endIdx = 0;
     *res = enclosedCalc(enclosedExpression, &endIdx);
@@ -45,21 +45,9 @@ static double enclosedCalc(const char* const expression, int* const endIdx) {
     int numNotClosedBrackets = 0;
     bool isPrevTokenNum = false;
 
-    double e  = exp(1);
-    double pi = M_PI;
-
     int i = 0;
     while (expression[i]) {
-        if (expression[i] == 'e') {
-            if (isPrevTokenNum) {
-                Stack_Push(&ops, &MUL);
-            }
-            isPrevTokenNum = true;
-
-            Stack_Push(&vals, &e);
-            i++;
-        }
-        else if ((expression[i] >= '0' && expression[i] <= '9') || expression[i] == '.') {
+        if ((expression[i] >= '0' && expression[i] <= '9') || expression[i] == '.') {
             if (isPrevTokenNum) {
                 Stack_Push(&ops, &MUL);
             }
@@ -173,6 +161,14 @@ static double enclosedCalc(const char* const expression, int* const endIdx) {
             }
             isPrevTokenNum = true;
             
+            const char* constName;
+            double constVal;
+            if (getConst(expression + i, &constName, &constVal) == true) {
+                Stack_Push(&vals, &constVal);
+                i += strlen(constName);
+                continue;
+            }
+
             const char* func = getFunc(expression + i);
             if (func == NULL) {
                 *endIdx = -1;
